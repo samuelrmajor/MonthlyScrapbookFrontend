@@ -1,13 +1,17 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect } from 'react'
+
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import LoggedInForm from './components/LoggedInForm'
 import Notification from './components/Notification'
 import NewBlogForm from './components/NewBlogForm'
 import Togglable from './components/Togglable'
+
 import blogService from './services/blogs'
 import loginService from './services/login'
 
+import { useDispatch } from 'react-redux'
+import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   //State Declarations
@@ -17,11 +21,11 @@ const App = () => {
   const [notifMessageType, setNotifMessageType] = useState('')
 
   //Hooks
-  useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs.sort((a,b) => b.likes -a.likes))
-    )
-  }, [])
+
+    const dispatch = useDispatch()
+      useEffect(() => {
+      dispatch(initializeBlogs())})
+
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -66,27 +70,11 @@ const App = () => {
     }, 5000)
 
   }
-  //Generate notification
-  const generateNotification = ({ message, type }) => {
-    setNotifMessageType(type)
-    setNotifMessage(message)
-    setTimeout(() => {
-      setNotifMessage(null)
-    }, 5000)
 
-  }
-  //creates new blog
-  const handleNewBlog = async (blogObject) => {
-    blogFormRef.current.toggleVisibility()
-    try {
-      const response = await blogService.create(blogObject)
-      setBlogs(blogs.concat({ ...response,user:user.id }))
-      generateNotification({ message: 'Blog Creation Succeeded', type: 'BlogCreationSucceeded' })
-    } catch (error) {
-      generateNotification({ message: 'Blog Creation Failed', type: 'error' })
-    }
-  }
-  const blogFormRef = useRef()
+
+
+ 
+
 
 
   //Deletes Blog
@@ -94,7 +82,7 @@ const App = () => {
     if (window.confirm('Delete: ' + blogObject.title + '?' )) {
       try {
         await blogService.deleteBlog(blogObject)
-        setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
+        setBlogs()
         generateNotification({ message: 'Blog Deletion Succeeded', type: 'BlogDeletionSucceeded' })
       } catch (error) {
         if (error.response.data.error === 'expiredtoken') {
