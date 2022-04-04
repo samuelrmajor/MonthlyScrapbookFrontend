@@ -10,15 +10,13 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs } from './reducers/blogReducer'
 
 const App = () => {
   //State Declarations
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
-  const [notifMessage, setNotifMessage] = useState(null)
-  const [notifMessageType, setNotifMessageType] = useState('')
+  // const [notifMessage, setNotifMessage] = useState(null)
+  // const [notifMessageType, setNotifMessageType] = useState('')
 
   //Hooks
 
@@ -26,107 +24,24 @@ const App = () => {
       useEffect(() => {
       dispatch(initializeBlogs())})
 
-
-  useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [])
-
-  //Services/Funcs
-  //Logs User in and Saves token locally
+    const blogs =useSelector(state=>state.blogs)
 
 
-  const handleLogin = async ({ username,password }) => {
-    try {
-      const user = await loginService.login({
-        username, password,
-      })
-      setUser(user)
-      blogService.setToken(user.token)
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
-      generateNotification({ message: 'Login Successful', type: 'Succesful Login' })
-    } catch (exception) {
-      generateNotification({ message: 'Wrong Credentials', type: 'error' })
-    }
-  }
-
-  //Logs user out, deletes token
-  const handleLogout = (event = 0 ) => {
-    if (event) {
-      event.preventDefault()
-    }
-    window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-    setNotifMessageType('LoggedOutSuccessfully')
-    setNotifMessage('Logged Out Successfully')
-    setTimeout(() => {
-      setNotifMessage(null)
-    }, 5000)
-
-  }
-
-
-
- 
-
-
-
-  //Deletes Blog
-  const handleDeleteBlog = async (blogObject) => {
-    if (window.confirm('Delete: ' + blogObject.title + '?' )) {
-      try {
-        await blogService.deleteBlog(blogObject)
-        setBlogs()
-        generateNotification({ message: 'Blog Deletion Succeeded', type: 'BlogDeletionSucceeded' })
-      } catch (error) {
-        if (error.response.data.error === 'expiredtoken') {
-          generateNotification({ message: 'Session Expired', type: 'error' })
-          handleLogout()
-        }
-      }}
-  }
-
-  //Updates a Blog
-  const handleUpdateBlog = async (blogObject) => {
-    try {
-      const response = await blogService.update(blogObject)
-      setBlogs(blogs.filter(blog => blog.id !== response.id).concat(response).sort((a,b) => b.likes-a.likes))
-    } catch (error) {
-      if (error.response.data.error === 'expiredtoken') {
-        generateNotification({ message: 'Session Expired', type: 'error' })
-        handleLogout()}
-      else
-      {generateNotification({ message: 'Blog Like Failed', type: 'error' })}
-
-    }}
-
-
-
-
-
-
-  if (user===null) {
+  if (!user) {
     return (
       <div>
-        <Notification
-          message={notifMessage}
-          type = {notifMessageType}
-        />
+        {/* <Notification
+          message={"tempmessage_out"}
+          type = {"temptype_out"}
+        /> */}
         <h2>Blogs</h2>
         <Togglable buttonLabel = "Login">
-          <LoginForm
-            handleLogin={handleLogin}
-          />
+          <LoginForm/>
         </Togglable>
         <div>
+
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} handleDeleteBlog = {handleDeleteBlog} userOwnedBool = {false} handleUpdateBlog = {handleUpdateBlog} loggedIn = {false}/>
+            <Blog key={blog.id} blog={blog} userOwnedBool = {false} loggedIn = {false}/>
           )}
         </div>
       </div>
@@ -137,17 +52,16 @@ const App = () => {
   return (
 
     <div>
-      <div>
+      {/* <div>
         <Notification
-          message={notifMessage}
-          type = {notifMessageType} />
-      </div>
+          message={"tempmessage_out"}
+          type = {"temptype_out"} />
+      </div> */}
       <h2>Blogs</h2>
       <LoggedInForm
         user = {user}
-        handleLogout = {handleLogout}
       />
-      <Togglable buttonLabel = "New Blog" ref = {blogFormRef}>
+      <Togglable buttonLabel = "New Blog">
         <NewBlogForm
           handleNewBlog = {handleNewBlog}
         />

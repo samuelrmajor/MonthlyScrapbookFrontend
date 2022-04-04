@@ -11,5 +11,6 @@ import {
   useNavigate,
   useMatch
 } from "react-router-dom"
+import store from './store'
 
-ReactDOM.render(<Router><App /></Router>, document.getElementById('root'))
+ReactDOM.render(<Provider store={store}><Router><App /></Router> </Provider>, document.getElementById('root'))
