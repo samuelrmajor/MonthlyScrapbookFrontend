@@ -5,22 +5,24 @@ import { changeLoginForm, changeNewForm } from '../reducers/toggleableReducer'
 const Togglable = props => {
   let visbility
   if (props.buttonLabel === "Login") {
-    visbility = useSelector(state => state.toggleables.loginForm)
+    visbility = useSelector(state => state.toggleable.loginForm)
   }
   else if (props.buttonLabel === "New Blog") {
-    visbility = useSelector(state => state.toggleables.newForm)
+    visbility = useSelector(state => state.toggleable.newForm)
   }
 
   const dispatch = useDispatch()
   const toggleVisibility = () => {
-    if (props.buttonLabel === "Login") 
-      dispatch(changeLoginForm())
-    else if (props.buttonLabel === "New Blog")
-      dispatch(changeNewForm())
+    if (props.buttonLabel === "Login") {
+      console.log("newLogin click")
+      dispatch(changeLoginForm())}
+    else if (props.buttonLabel === "New Blog"){
+      console.log("newForm click")
+      dispatch(changeNewForm())}
   }
 
-  const hideWhenVisible = { display: visible ? 'none' : '' }
-  const showWhenVisible = { display: visible ? '' : 'none' }
+  const hideWhenVisible = { display: visbility ? 'none' : '' }
+  const showWhenVisible = { display: visbility ? '' : 'none' }
 
   return (
     <div>

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-
+import { useDispatch, useSelector } from 'react-redux'
 import blogService from '../services/blogs'
 
 //??/toDo
@@ -14,7 +14,7 @@ const blogSlice = createSlice({
   reducers: {
     updateBlog(state, action) {
       const changedBlog = action.payload
-      const id = changedAnecdote.id
+      const id = changedBlog.id
       return sortBlogs(state.map(blog => blog.id !== id ? blog : changedBlog))
     },
     appendBlog(state,action) {
@@ -32,7 +32,7 @@ const blogSlice = createSlice({
 })
 
 
-const sortBlogs = ({blogs}) =>{
+const sortBlogs = (blogs) =>{
   const returnBlogs = blogs.sort((a,b) => b.likes -a.likes)
   return returnBlogs
 }
@@ -40,22 +40,24 @@ const sortBlogs = ({blogs}) =>{
 export const initializeBlogs = () => {
   return async dispatch => {
     const blogs = await blogService.getAll()
+    console.log(blogs)
     dispatch(setBlogs(sortBlogs(blogs)))
   }
 }
 
 
 export const createBlog= content => {
-  //can this be done
-  const user = useSelector(state => state.user)
+  const newBlogSent = content.newBlog
+  const user = content.user
   return async dispatch => {
-    const newBlog = await blogService.create(content)
+    const newBlog = await blogService.create(newBlogSent)
+    console.log(newBlog)
+    console.log(user)
     dispatch(appendBlog({...newBlog, user:user.id  }))
   }
 }
 
 export const likeBlog = content => {
-  console.log("like", content)
   const object = {...content, likes: content.likes + 1}
   return async dispatch => {
     const likedBlog = await blogService.update(object)
@@ -64,7 +66,6 @@ export const likeBlog = content => {
 }
 
 export const deleteBlog = content => {
-  console.log("delete", content)
   return async dispatch => {
     await blogService.deleteBlog(content)
     dispatch(removeBlog(content))
@@ -73,5 +74,5 @@ export const deleteBlog = content => {
 
 
 
-export const {removeBlog, updateBlog, appendBlog,setBlog } = blogSlice.actions
+export const {removeBlog, updateBlog, appendBlog,setBlogs } = blogSlice.actions
 export default blogSlice.reducer

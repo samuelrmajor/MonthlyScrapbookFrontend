@@ -1,17 +1,19 @@
-import PropTypes from 'prop-types'
-const LoggedInForm = ({
-  user,
-  handleLogout
-}) => { return(
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import {endLogin} from '../reducers/loginReducer'
+const LoggedInForm = () => { 
+  const user = useSelector(state => state.user)
+  const dispatch = useDispatch()
+  const handleLogin = () => {
+    dispatch(endLogin())
+  }
+  return(
   <div>
     <h5>logged in as: {user.name}</h5>
-    <form onSubmit={handleLogout}>
+    <form onSubmit={handleLogin}>
       <button type="submit">Log Out</button>
     </form>
   </div>
 )}
-LoggedInForm.propTypes = {
-  handleLogout: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
-}
+
 export default LoggedInForm

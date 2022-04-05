@@ -10,7 +10,7 @@ const toggleSlice = createSlice({
   initialState: {loginForm: false, newForm: false},
   reducers: {
     changeLoginFormState(state, action) {
-      return {...state, newForm: !state.loginForm}
+      return {...state, loginForm: !state.loginForm}
     },
     changeNewFormState(state,action) {
       return {...state, newForm: !state.newForm}

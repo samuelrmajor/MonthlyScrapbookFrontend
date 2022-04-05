@@ -22,12 +22,12 @@ const App = () => {
 
     const dispatch = useDispatch()
       useEffect(() => {
-      dispatch(initializeBlogs())})
+      dispatch(initializeBlogs())}, [dispatch])
 
     const blogs =useSelector(state=>state.blogs)
-
-
+    const user = useSelector(state=>state.user)
   if (!user) {
+
     return (
       <div>
         {/* <Notification
@@ -36,7 +36,7 @@ const App = () => {
         /> */}
         <h2>Blogs</h2>
         <Togglable buttonLabel = "Login">
-          <LoginForm/>
+          <LoginForm />
         </Togglable>
         <div>
 
@@ -58,21 +58,16 @@ const App = () => {
           type = {"temptype_out"} />
       </div> */}
       <h2>Blogs</h2>
-      <LoggedInForm
-        user = {user}
-      />
+      <LoggedInForm/>
       <Togglable buttonLabel = "New Blog">
-        <NewBlogForm
-          handleNewBlog = {handleNewBlog}
+        <NewBlogForm user = {user}
         />
       </Togglable>
       <div>
         {blogs.map(blog =>
           <Blog key={blog.id}
             blog={blog}
-            handleDeleteBlog = {handleDeleteBlog}
             userOwnedBool = {user.id === blog.user}
-            handleUpdateBlog = {handleUpdateBlog}
             loggedIn = {true} />
         )}
       </div>

@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { useDispatch, useSelector  } from 'react-redux'
 import PropTypes from 'prop-types'
-const Blog = ({ blog, handleDeleteBlog, userOwnedBool, handleUpdateBlog, loggedIn }) => {
+import { deleteBlog, likeBlog } from '../reducers/blogReducer'
+const Blog = ({ blog, userOwnedBool, loggedIn }) => {
+  //do i need to outsource user owned? probably in blogs component
   const [showDetails, setShowDetails] = useState(false)
   const blogStyle = {
     paddingTop: 10,
@@ -9,6 +12,8 @@ const Blog = ({ blog, handleDeleteBlog, userOwnedBool, handleUpdateBlog, loggedI
     borderWidth: 1,
     marginBottom: 5
   }
+  const dispatch = useDispatch()
+
   const loggedInLike = loggedIn ? { display: '' } : { display:'none' }
   const userOwned = userOwnedBool ? { display: '' } : { display:'none' }
 
@@ -16,15 +21,14 @@ const Blog = ({ blog, handleDeleteBlog, userOwnedBool, handleUpdateBlog, loggedI
     event.preventDefault()
     setShowDetails(!showDetails)
   }
-  const likeBlog = (event) => {
+  const likeCurrentBlog = (event) => {
     event.preventDefault()
-    handleUpdateBlog({ ...blog, likes: blog.likes+1 })
+    dispatch(likeBlog(blog))
   }
 
   const sendDeleteBlog = (event) => {
     event.preventDefault()
-    console.log(blog)
-    handleDeleteBlog(blog)
+    dispatch(deleteBlog(blog))
   }
 
   //SHOWING DETAILS
@@ -33,7 +37,7 @@ const Blog = ({ blog, handleDeleteBlog, userOwnedBool, handleUpdateBlog, loggedI
       <div className = 'blog' style = {blogStyle}>
     Title: {blog.title} <br/>
     Author: {blog.author}<br/>
-    <span className = "blogLikes"> Likes: {blog.likes}</span> <button id = "like-button" style = {loggedInLike} onClick={likeBlog}>Like</button><br/>
+    <span className = "blogLikes"> Likes: {blog.likes}</span> <button id = "like-button" style = {loggedInLike} onClick={likeCurrentBlog}>Like</button><br/>
     Url: {blog.url} <br/>
         <button onClick={toggleVisibility}>Hide</button>
         <button id="remove-blog" style = {userOwned} onClick={sendDeleteBlog}>Remove</button>
@@ -52,9 +56,7 @@ const Blog = ({ blog, handleDeleteBlog, userOwnedBool, handleUpdateBlog, loggedI
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,
-  handleDeleteBlog: PropTypes.func.isRequired,
   userOwnedBool: PropTypes.bool.isRequired,
-  handleUpdateBlog: PropTypes.func.isRequired,
   loggedIn: PropTypes.bool.isRequired
 }
 
