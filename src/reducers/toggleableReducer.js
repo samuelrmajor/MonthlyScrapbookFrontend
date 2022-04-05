@@ -7,7 +7,7 @@ import blogService from '../services/blogs'
 
 const toggleSlice = createSlice({
   name: 'toggleables',
-  initialState: {loginForm: false, newForm: false},
+  initialState: {loginForm: true, newForm: false},
   reducers: {
     changeLoginFormState(state, action) {
       return {...state, loginForm: !state.loginForm}

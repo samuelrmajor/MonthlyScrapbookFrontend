@@ -26,14 +26,15 @@ const App = () => {
 
     const blogs =useSelector(state=>state.blogs)
     const user = useSelector(state=>state.user)
+    const notification = useSelector(state => state.notification)
   if (!user) {
 
     return (
       <div>
-        {/* <Notification
-          message={"tempmessage_out"}
-          type = {"temptype_out"}
-        /> */}
+        <Notification
+          message={notification.message}
+          type = {notification.type}
+        />
         <h2>Blogs</h2>
         <Togglable buttonLabel = "Login">
           <LoginForm />
@@ -52,11 +53,11 @@ const App = () => {
   return (
 
     <div>
-      {/* <div>
+      <div>
         <Notification
-          message={"tempmessage_out"}
-          type = {"temptype_out"} />
-      </div> */}
+          message={notification.message}
+          type = {notification.type} />
+      </div>
       <h2>Blogs</h2>
       <LoggedInForm/>
       <Togglable buttonLabel = "New Blog">

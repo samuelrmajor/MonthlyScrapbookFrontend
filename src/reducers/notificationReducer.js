@@ -1,21 +1,17 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const notificationSlice = createSlice({
-  name: 'notifications',
-  initialState: {message: "", 
-        style: "none"} ,
+  name: 'notification',
+  initialState: {message: null, 
+        type: "error"} ,
   reducers: {
     showNotification(state, action) {
-      const message = action.payload
-      return {message: message,
-        style: {
-            border: 'solid',
-            padding: 10,
-            borderWidth: 1
-        }}
+      const message = action.payload.message
+      const type = action.payload.type
+      return {message: message, type: type}
     },
     hideNotification(state, action) {
-      return {message: "", 
+      return {message: null, 
         style: "none"}
     },
   }
@@ -23,10 +19,10 @@ const notificationSlice = createSlice({
 
 export const setNotification = content => {
   return async dispatch => {
-    dispatch(showNotification(content.message))
+    dispatch(showNotification({message: content.message, type: content.type}))
     setTimeout(() => {
             dispatch(hideNotification())
-            }, content.time)
+            }, 5000)
   }
 }
 

@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { useDispatch, useSelector  } from 'react-redux'
+import setNotification from './notificationReducer'
 
 //??/toDo
 //import NewAnecdote from '../components/NewAnecdote'
@@ -13,7 +15,6 @@ import blogService from '../services/blogs'
 //check on what user currently stores.
 //    
   let loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-  console.log(loggedUserJSON)
   let userInit
   if (loggedUserJSON) {
     userInit = JSON.parse(loggedUserJSON)
@@ -22,8 +23,6 @@ import blogService from '../services/blogs'
   else{
     userInit = null
   }
-  console.log(userInit)
-
 
 
 const userSlice = createSlice({
@@ -40,11 +39,10 @@ const userSlice = createSlice({
 })
 
 export const initializeLogin = content => {
-  console.log(content)
   const username = content.username
   const password = content.password
   return async dispatch => {
-    try {
+    
       const user = await loginService.login({
         username, password
       })
@@ -56,10 +54,7 @@ export const initializeLogin = content => {
       )
       //Set notification here??
     dispatch(setUser(user))
-    } catch (error) {
-
-        console.log("Bad username / password", error)
-    }
+     
   }
 }
 

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useDispatch, useSelector  } from 'react-redux'
 import PropTypes from 'prop-types'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
+import {setNotification} from '../reducers/notificationReducer'
 const Blog = ({ blog, userOwnedBool, loggedIn }) => {
   //do i need to outsource user owned? probably in blogs component
   const [showDetails, setShowDetails] = useState(false)
@@ -28,7 +29,7 @@ const Blog = ({ blog, userOwnedBool, loggedIn }) => {
 
   const sendDeleteBlog = (event) => {
     event.preventDefault()
-    dispatch(deleteBlog(blog))
+    dispatch(deleteBlog(blog)).then( value => dispatch(setNotification({message:"Blog Deletion Succeeded", type: "BlogDeletion"}))).catch(value => dispatch(setNotification({message:"Blog Deletion Failed", type: "error"})))
   }
 
   //SHOWING DETAILS
