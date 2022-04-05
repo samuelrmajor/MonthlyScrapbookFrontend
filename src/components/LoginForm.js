@@ -22,10 +22,7 @@ const LoginForm = (
 
     event.preventDefault()
     dispatch(initializeLogin({ username: username, password:password })).then( value => dispatch(setNotification({message:"Login Succeeded", type: "Login"}))).catch(value => dispatch(setNotification({message:"Wrong Credentials", type: "error"})))
-
-    // .catch(error => {
-    //   dispatch(setNotification({message:"Login Fail", type: "error"}))}).then(console.log("i hate this SHIT!!!"))
-    
+        
     setUsername('')
     setPassword('')
 
