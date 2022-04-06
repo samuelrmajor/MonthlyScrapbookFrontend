@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useDispatch, useSelector  } from 'react-redux'
-import PropTypes from 'prop-types'
+import { useDispatch} from 'react-redux'
 import { deleteBlog, likeBlog } from '../reducers/blogReducer'
 import {setNotification} from '../reducers/notificationReducer'
+
 const Blog = ({ blog, userOwnedBool, loggedIn }) => {
   //do i need to outsource user owned? probably in blogs component
   const [showDetails, setShowDetails] = useState(false)
@@ -55,10 +55,5 @@ const Blog = ({ blog, userOwnedBool, loggedIn }) => {
   }
 }
 
-Blog.propTypes = {
-  blog: PropTypes.object.isRequired,
-  userOwnedBool: PropTypes.bool.isRequired,
-  loggedIn: PropTypes.bool.isRequired
-}
 
 export default Blog

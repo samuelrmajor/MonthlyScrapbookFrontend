@@ -42,7 +42,6 @@ export const initializeLogin = content => {
   const username = content.username
   const password = content.password
   return async dispatch => {
-    
       const user = await loginService.login({
         username, password
       })
