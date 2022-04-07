@@ -34,11 +34,11 @@ const NewBlogForm = (user) => {
   }
 
 
-
+  const mediaTypes = ["Movie", "Book", "Documentary", "TV Show", "Magazine", "Article", "Website", "Artwork", "Other"]
 
   return (
     <div>
-      <h1>New Blog:</h1>
+      <h4>New Blog:</h4>
       <form onSubmit={addNewBlog}>
         <div>
             Title:
@@ -69,6 +69,17 @@ const NewBlogForm = (user) => {
             onChange={handleURLChange }
             id='new-blog-url-input'
           />
+        </div>
+        <div>
+          <label for="media-types">Media Type:</label>
+  
+          <select name = "media-types" id ="media-types">
+           
+          {mediaTypes.map(media => 
+            <option value ={media}>{media}</option>
+            )} 
+            
+          </select>
         </div>
         <button type="submit">Create</button>
       </form>

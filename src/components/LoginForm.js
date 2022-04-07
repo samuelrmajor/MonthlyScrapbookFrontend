@@ -3,9 +3,12 @@ import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import {initializeLogin} from '../reducers/loginReducer'
 import {setNotification} from '../reducers/notificationReducer'
+import {
+  useNavigate
+} from 'react-router-dom'
 const LoginForm = (
 ) => {
-
+  const navigate = useNavigate()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -21,7 +24,8 @@ const LoginForm = (
   const handleSendLogin = (event) => {
 
     event.preventDefault()
-    dispatch(initializeLogin({ username: username, password:password })).then( value => dispatch(setNotification({message:"Login Succeeded", type: "Login"}))).catch(value => dispatch(setNotification({message:"Wrong Credentials", type: "error"})))
+    dispatch(initializeLogin({ username: username, password:password })).then( value =>{  navigate('/')
+      dispatch(setNotification({message:"Login Succeeded", type: "Login"}))}).catch(value => dispatch(setNotification({message:"Wrong Credentials", type: "error"})))
         
     setUsername('')
     setPassword('')

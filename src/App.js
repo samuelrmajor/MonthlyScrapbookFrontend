@@ -2,12 +2,13 @@ import { useEffect } from 'react'
 
 import Blogs from './components/Blogs'
 import Blog from './components/Blog'
-import LoginForm from './components/LoginForm'
 import LoggedInForm from './components/LoggedInForm'
 import Notification from './components/Notification'
 import NewBlogForm from './components/NewBlogForm'
 import Togglable from './components/Togglable'
 import Home from './components/Home'
+import LoginRegisterForm from './components/LoginRegisterForm'
+
 
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -60,7 +61,7 @@ const App = () => {
       <Routes>
         <Route path="/blogs/:id" element={<Blog blog={blog} />} />  
         <Route path="/blogs" element={<Blogs blogs={blogs}  />} />   
-        <Route path="/login" element={user ?  <LoggedInForm/> : <Togglable buttonLabel = "Login"> <LoginForm/> </Togglable>} />
+        <Route path="/login" element={user ?  <LoggedInForm/> : <LoginRegisterForm/>} />
         <Route path="/" element={<Home />} />      
       </Routes>   
       <div>
